@@ -6,7 +6,7 @@
 
 There is a bash installation script for Ubuntu 16.04+ and MacOS 10.10+ which can be used to checkout and build the project from source:
 
-`$ curl -sL "https://raw.githubusercontent.com/turtlecoin/turtlecoin/master/multi_installer.sh" | bash `
+`$ curl -sL "https://raw.githubusercontent.com/karotugreencoin/karotu-green-coin/master/multi_installer.sh" | bash `
 
 On Ubuntu you will be asked for sudo rights to install software. The binaries will be in `./src` after compilation is complete.
 
@@ -25,7 +25,7 @@ See the script for more installation details and please consider extending it fo
 ##### Building
 
 - From the start menu, open 'x64 Native Tools Command Prompt for vs2017'.
-- `cd <your_turtlecoin_directory>`
+- `cd <your_karotu_green_coin_directory>`
 - `mkdir build`
 - `cd build`
 - `cmake -G "Visual Studio 14 Win64" .. -DBOOST_ROOT=D:/Boost/boost_1_59_0` (Or your boost installed dir.)
@@ -44,8 +44,8 @@ See the script for more installation details and please consider extending it fo
 
 ##### Building
 
-- `git clone https://github.com/turtlecoin/turtlecoin`
-- `cd turtlecoin`
+- `git clone https://github.com/karotugreencoin/karotu-green-coin`
+- `cd karotu-green-coin`
 - `mkdir build && cd $_`
 - `cmake ..` or `cmake -DBOOST_ROOT=<path_to_boost_install> ..` when building
   from a specific boost install
@@ -54,4 +54,4 @@ See the script for more installation details and please consider extending it fo
 The binaries will be in `./src` after compilation is complete.
 
 #### Thanks
-Cryptonote Developers, Bytecoin Developers, Monero Developers, Forknote Project, TurtleCoin Community
+Cryptonote Developers, Bytecoin Developers, Monero Developers, Forknote Project, Karotu Green Coin Community

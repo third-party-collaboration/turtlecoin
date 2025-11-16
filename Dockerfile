@@ -1,7 +1,7 @@
 # daemon runs in the background
-# run something like tail /var/log/turtlecoind/current to see the status
+# run something like tail /var/log/kgcoind/current to see the status
 # be sure to run with volumes, ie:
-# docker run -v $(pwd)/turtlecoind:/var/lib/turtlecoind -v $(pwd)/wallet:/home/turtlecoin --rm -ti turtlecoin:0.2.2
+# docker run -v $(pwd)/kgcoind:/var/lib/kgcoind -v $(pwd)/wallet:/home/karotu --rm -ti karotu-green-coin:0.2.2
 ARG base_image_version=0.10.0
 FROM phusion/baseimage:$base_image_version
 
@@ -11,8 +11,8 @@ RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C /
 ADD https://github.com/just-containers/socklog-overlay/releases/download/v2.1.0-0/socklog-overlay-amd64.tar.gz /tmp/
 RUN tar xzf /tmp/socklog-overlay-amd64.tar.gz -C /
 
-ARG TURTLECOIN_VERSION=v0.3.0
-ENV TURTLECOIN_VERSION=${TURTLECOIN_VERSION}
+ARG KAROTU_GREEN_COIN_VERSION=v0.3.0
+ENV KAROTU_GREEN_COIN_VERSION=${KAROTU_GREEN_COIN_VERSION}
 
 # install build dependencies
 # checkout the latest tag
@@ -26,26 +26,26 @@ RUN apt-get update && \
       git cmake \
       libboost1.58-all-dev \
       librocksdb-dev && \
-    git clone https://github.com/turtlecoin/turtlecoin.git /src/turtlecoin && \
-    cd /src/turtlecoin && \
-    git checkout $TURTLECOIN_VERSION && \
+    git clone https://github.com/karotugreencoin/karotu-green-coin.git /src/karotu-green-coin && \
+    cd /src/karotu-green-coin && \
+    git checkout $KAROTU_GREEN_COIN_VERSION && \
     mkdir build && \
     cd build && \
     cmake -DCMAKE_CXX_FLAGS="-g0 -Os -fPIC -std=gnu++11" .. && \
     make -j$(nproc) && \
     mkdir -p /usr/local/bin && \
-    cp src/TurtleCoind /usr/local/bin/TurtleCoind && \
+    cp src/kgcoind /usr/local/bin/kgcoind && \
     cp src/walletd /usr/local/bin/walletd && \
     cp src/simplewallet /usr/local/bin/simplewallet && \
     cp src/miner /usr/local/bin/miner && \
     cp src/connectivity_tool /usr/local/bin/connectivity_tool && \
-    strip /usr/local/bin/TurtleCoind && \
+    strip /usr/local/bin/kgcoind && \
     strip /usr/local/bin/walletd && \
     strip /usr/local/bin/simplewallet && \
     strip /usr/local/bin/miner && \
     strip /usr/local/bin/connectivity_tool && \
     cd / && \
-    rm -rf /src/turtlecoin && \
+    rm -rf /src/karotu-green-coin && \
     apt-get remove -y build-essential python-dev gcc-4.9 g++-4.9 git cmake libboost1.58-all-dev librocksdb-dev && \
     apt-get autoremove -y && \
     apt-get install -y  \
@@ -59,27 +59,27 @@ RUN apt-get update && \
       libboost-program-options1.58.0 \
       libicu55
 
-# setup the turtlecoind service
-RUN useradd -r -s /usr/sbin/nologin -m -d /var/lib/turtlecoind turtlecoind && \
-    useradd -s /bin/bash -m -d /home/turtlecoin turtlecoin && \
-    mkdir -p /etc/services.d/turtlecoind/log && \
-    mkdir -p /var/log/turtlecoind && \
-    echo "#!/usr/bin/execlineb" > /etc/services.d/turtlecoind/run && \
-    echo "fdmove -c 2 1" >> /etc/services.d/turtlecoind/run && \
-    echo "cd /var/lib/turtlecoind" >> /etc/services.d/turtlecoind/run && \
-    echo "export HOME /var/lib/turtlecoind" >> /etc/services.d/turtlecoind/run && \
-    echo "s6-setuidgid turtlecoind /usr/local/bin/TurtleCoind" >> /etc/services.d/turtlecoind/run && \
-    chmod +x /etc/services.d/turtlecoind/run && \
-    chown nobody:nogroup /var/log/turtlecoind && \
-    echo "#!/usr/bin/execlineb" > /etc/services.d/turtlecoind/log/run && \
-    echo "s6-setuidgid nobody" >> /etc/services.d/turtlecoind/log/run && \
-    echo "s6-log -bp -- n20 s1000000 /var/log/turtlecoind" >> /etc/services.d/turtlecoind/log/run && \
-    chmod +x /etc/services.d/turtlecoind/log/run && \
-    echo "/var/lib/turtlecoind true turtlecoind 0644 0755" > /etc/fix-attrs.d/turtlecoind-home && \
-    echo "/home/turtlecoin true turtlecoin 0644 0755" > /etc/fix-attrs.d/turtlecoin-home && \
-    echo "/var/log/turtlecoind true nobody 0644 0755" > /etc/fix-attrs.d/turtlecoind-logs
+# setup the kgcoind service
+RUN useradd -r -s /usr/sbin/nologin -m -d /var/lib/kgcoind kgcoind && \
+    useradd -s /bin/bash -m -d /home/karotu karotu && \
+    mkdir -p /etc/services.d/kgcoind/log && \
+    mkdir -p /var/log/kgcoind && \
+    echo "#!/usr/bin/execlineb" > /etc/services.d/kgcoind/run && \
+    echo "fdmove -c 2 1" >> /etc/services.d/kgcoind/run && \
+    echo "cd /var/lib/kgcoind" >> /etc/services.d/kgcoind/run && \
+    echo "export HOME /var/lib/kgcoind" >> /etc/services.d/kgcoind/run && \
+    echo "s6-setuidgid kgcoind /usr/local/bin/kgcoind" >> /etc/services.d/kgcoind/run && \
+    chmod +x /etc/services.d/kgcoind/run && \
+    chown nobody:nogroup /var/log/kgcoind && \
+    echo "#!/usr/bin/execlineb" > /etc/services.d/kgcoind/log/run && \
+    echo "s6-setuidgid nobody" >> /etc/services.d/kgcoind/log/run && \
+    echo "s6-log -bp -- n20 s1000000 /var/log/kgcoind" >> /etc/services.d/kgcoind/log/run && \
+    chmod +x /etc/services.d/kgcoind/log/run && \
+    echo "/var/lib/kgcoind true kgcoind 0644 0755" > /etc/fix-attrs.d/kgcoind-home && \
+    echo "/home/karotu true karotu 0644 0755" > /etc/fix-attrs.d/karotu-home && \
+    echo "/var/log/kgcoind true nobody 0644 0755" > /etc/fix-attrs.d/kgcoind-logs
 
-VOLUME ["/var/lib/turtlecoind", "/home/turtlecoin","/var/log/turtlecoind"]
+VOLUME ["/var/lib/kgcoind", "/home/karotu","/var/log/kgcoind"]
 
 ENTRYPOINT ["/init"]
-CMD ["/usr/bin/execlineb", "-P", "-c", "emptyenv cd /home/turtlecoin export HOME /home/turtlecoin s6-setuidgid turtlecoin /bin/bash"]
+CMD ["/usr/bin/execlineb", "-P", "-c", "emptyenv cd /home/karotu export HOME /home/karotu s6-setuidgid karotu /bin/bash"]

@@ -572,7 +572,7 @@ bool CryptoNoteProtocolHandler::request_missing_objects(CryptoNoteConnectionCont
     requestMissingPoolTransactions(context);
 
     context.m_state = CryptoNoteConnectionContext::state_normal;
-    logger(Logging::INFO, Logging::BRIGHT_GREEN) << context << "SUCCESSFULLY SYNCHRONIZED WITH THE TURTLECOIN NETWORK.";
+    logger(Logging::INFO, Logging::BRIGHT_GREEN) << context << "SUCCESSFULLY SYNCHRONIZED WITH THE KAROTU GREEN COIN NETWORK.";
     on_connection_synchronized();
   }
   return true;
@@ -583,7 +583,7 @@ bool CryptoNoteProtocolHandler::on_connection_synchronized() {
   if (m_synchronized.compare_exchange_strong(val_expected, true)) {
     logger(Logging::INFO) << ENDL
       << ENDL
-      << "Always exit TurtleCoind and Simplewallet with the \"exit\" command." << ENDL
+      << "Always exit kgcoind and Simplewallet with the \"exit\" command." << ENDL
       << "If you do not exit properly, you may lose your blockchain and wallet data." << ENDL
       << ENDL
       << "Use \"help\" command to see the list of available commands." << ENDL
